@@ -1,0 +1,65 @@
+name: Release Windows exe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "src-tauri/**"
+      - "python/**"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.ts"
+      - "tailwind.config.js"
+      - "postcss.config.js"
+      - "tsconfig.json"
+      - ".github/workflows/release-exe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-exe
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build the Windows app
+        run: npm run tauri build
+
+      - name: Publish the exe
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: clippr for Windows
+          make_latest: true
+          overwrite_files: true
+          body: |
+            Windows build of clippr.
+
+            `clippr.exe` is the app. `clippr_0.1.0_x64-setup.exe` is the installer.
+
+            The app runs the Python pipeline from a checkout of this repo. After `python -m venv .venv` and `pip install -r python\requirements.txt`, put `clippr.exe` inside that checkout (for example `src-tauri\target\release\`). Launching it from Downloads will not find the venv. HLAE and FFmpeg download on first launch into `%USERPROFILE%\.clippr`.
+          files: |
+            src-tauri/target/release/clippr.exe
+            src-tauri/target/release/bundle/nsis/*-setup.exe

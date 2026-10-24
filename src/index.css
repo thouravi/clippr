@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(240, 180, 41, 0.08), transparent 55%),
+    radial-gradient(900px 400px at 100% 0%, rgba(90, 140, 255, 0.06), transparent 50%),
+    #090b10;
+  color: #f2f4f8;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2c3444;
+  border-radius: 999px;
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid #f0b429;
+  outline-offset: 2px;
+}

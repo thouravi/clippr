@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.venv/
+**/__pycache__/
+**/*.pyc
+.pytest_cache/
+src-tauri/target/
+src-tauri/gen/
+python/.jobs/
+*.dem
+*.dem.gz
+*.dem.zst
+.DS_Store
